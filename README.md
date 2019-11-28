@@ -1,8 +1,8 @@
 <div align="center">
   <img src="src/assets/icon/favicon.png" width="180">
-  <br> 
-  <font size="16">Devorador<span style="color: #2bb9b6">Demente</span></font>
 </div>
+
+# <div align="center">Devorador<span style="color: #2bb9b6">Demente</span></div>
 
 - Ionic - 5.4.7
 - Node - 12.4.0
