@@ -13,7 +13,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared/auth.guard';
 import { UserService } from './shared/user.service';
-import { GameService } from './game/game.service';
 
 @NgModule({
   declarations: [AppComponent],

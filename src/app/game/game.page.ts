@@ -32,7 +32,18 @@ export class GamePage {
     return this.$game;
   }
   set game(game: IGame) {
-    Object.assign(this.$game, game);
+    const { name, title, img, startTime, description, maxPlayers, id, master, players } = game;
+    Object.assign(this.$game, {
+      name,
+      title,
+      img,
+      startTime,
+      description,
+      maxPlayers,
+      id,
+      master,
+      players,
+    });
     this.createForm();
   }
 

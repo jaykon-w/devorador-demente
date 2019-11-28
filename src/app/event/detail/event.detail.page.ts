@@ -1,24 +1,14 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { from, Observable, of, BehaviorSubject, concat } from 'rxjs';
-import {
-  bufferCount,
-  mergeMap,
-  pluck,
-  switchMap,
-  tap,
-  map,
-  withLatestFrom,
-  startWith,
-  take,
-} from 'rxjs/operators';
+import * as R from 'ramda';
+import { BehaviorSubject, concat, from, Observable, of } from 'rxjs';
+import { bufferCount, map, mergeMap, pluck, take, tap } from 'rxjs/operators';
 import { GamePage } from '../../game/game.page';
 import { GameService, IGame } from '../../game/game.service';
 import { UserService } from '../../shared/user.service';
 import { IEvent } from '../event.interface';
 import { EventService } from '../event.service';
-import * as R from 'ramda';
 
 @Component({
   selector: 'app-event-detail',
@@ -58,14 +48,13 @@ export class EventDetailPage {
         return concat(
           from(games).pipe(
             mergeMap((e: string) => this.gameService.getGame(e)),
-            map(e => ({ ...e, participate: e.players.some(j => j.uid === this.userId) })),
             bufferCount(games.length),
-            tap(e => (this.alreadyParticipateFrom = e.find((j: any) => j.participate))),
             tap(e => (this.games = e)),
             take(1),
           ),
           from(games).pipe(
             mergeMap((e: string) => this.gameService.getGame(e)),
+            map(e => ({ ...e, participate: e.players.some(j => j.uid === this.userId) })),
             tap(e => {
               this.games = this.games.map(j => {
                 if (j.id === e.id) {
@@ -74,6 +63,7 @@ export class EventDetailPage {
                 return j;
               });
             }),
+            tap(e => (this.alreadyParticipateFrom = this.games.find((j: any) => j.participate))),
           ),
         );
       }),
