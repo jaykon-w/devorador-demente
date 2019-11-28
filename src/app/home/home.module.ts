@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
+import { LoginService } from '../login/login.service';
 
 @NgModule({
   imports: [
@@ -14,10 +15,21 @@ import { HomePage } from './home.page';
     RouterModule.forChild([
       {
         path: '',
-        component: HomePage
+        component: HomePage,
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../event/event.module').then(m => m.EventPageModule),
+          }
+        ]
+      },
+      {
+        path: '**',
+        redirectTo: '',
       }
     ])
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  providers: [LoginService]
 })
 export class HomePageModule {}

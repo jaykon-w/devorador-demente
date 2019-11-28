@@ -24,3 +24,23 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+hr {
+  background: #dddee1;
+}
+
+ion-content > main {
+  background: linear-gradient(to bottom, #fbfbfb 0%, #d4d4d4 100%);
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  min-height: 100vh;
+}
+
+ion-card {
+  background: #fff !important;
+}
+
+ion-toolbar ion-title {
+  padding: 0 16px;
+}

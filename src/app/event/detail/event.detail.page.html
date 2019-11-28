@@ -1,0 +1,111 @@
+<ion-header
+  parallax
+  imageUrl="{{(event$ | async)?.img}}"
+  maximumHeight="300"
+  expandedColor="#000"
+  titleColor="#fff"
+>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{(event$ | async)?.name}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main *ngIf="event$ | async as event" style="padding-bottom: 42px;">
+    <!-- <img class="eventImg" [src]="event.img" alt="" /> -->
+    <div style="max-width: 1024px;" class="ion-padding">
+      <h1>{{event.name}}</h1>
+      <p>
+        {{event.local}} - {{event.city}} / {{event.state}}<br />
+        <a
+          href="https://maps.google.com/maps/search/{{event.address}}"
+          target="_black"
+          style="font-size: 0.8em;"
+          ><strong>{{event.address}}</strong></a
+        >
+      </p>
+      <p>
+        {{event.date | date: "dd/MM/yyyy"}} - {{event.startTime}} Às {{event.endTime}}
+      </p>
+      <p>
+        {{event.description}}
+      </p>
+      <br />
+      <h2>Mesas</h2>
+
+      <ion-card class="games" style="margin: 16px -4px;" *ngFor="let game of (games$ | async)">
+        <div style="position: relative;">
+          <ion-fab vertical="bottom" horizontal="end" edge *ngIf="userId === game.master.uid">
+            <ion-fab-button color="secondary" (click)="editGame(game)">
+              <ion-icon name="create"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+          <img [src]="game.img" />
+        </div>
+
+        <ion-card-header>
+          <ion-card-title>{{game.title}}</ion-card-title>
+          <ion-card-subtitle><strong>Jogo:</strong> {{game.name}}</ion-card-subtitle>
+          <ion-card-subtitle
+            ><strong>Mestre:</strong> {{game.master.displayName}}</ion-card-subtitle
+          >
+          <ion-card-subtitle><strong>Horário:</strong> {{game.startTime}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            {{game.description}}
+          </p>
+        </ion-card-content>
+
+        <h5 class="ion-padding">Jogadores {{game.players.length}}/{{game.maxPlayers}}</h5>
+        <hr />
+        <ion-list class="ion-no-padding">
+          <ion-item lines="full" *ngFor="let player of game.players">
+            <ion-avatar slot="start">
+              <img [src]="player.photoURL" />
+            </ion-avatar>
+            <ion-label> {{player.displayName}} </ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-item lines="none">
+          <ion-button
+            fill="outline"
+            slot="end"
+            *ngIf="!game.participate && userId !== game.master.uid && game.players.length < game.maxPlayers"
+            (click)="participate(game)"
+            >Participar</ion-button
+          >
+          <ion-button
+            fill="outline"
+            slot="end"
+            color="danger"
+            *ngIf="game.participate && userId !== game.master.uid"
+            (click)="getOut(game)"
+            >Sair</ion-button
+          >
+          <ion-button
+            fill="solid"
+            color="danger"
+            slot="end"
+            *ngIf="userId === game.master.uid"
+            (click)="deleteGame(game)"
+          >
+            <ion-icon name="trash" slot="start"></ion-icon>
+            Deletar
+          </ion-button>
+        </ion-item>
+      </ion-card>
+    </div>
+  </main>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="createGame()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

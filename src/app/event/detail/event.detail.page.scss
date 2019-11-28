@@ -1,0 +1,37 @@
+img.eventImg {
+  max-height: 45vh;
+  width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.people {
+  margin: 5em 1em;
+}
+
+.person {
+  &.master {
+    img {
+      height: 200px;
+      width: 200px;
+      border-radius: 50%;
+      border: solid 5px var(--ion-color-secondary);
+      overflow: hidden;
+      object-fit: cover;
+    }
+  }
+}
+
+.games {
+  img {
+    max-height: 250px;
+    width: 100%;
+    overflow: hidden;
+    object-fit: cover;
+  }
+}
+
+.parallax-title {
+  text-shadow: #000 0px 0px 3px;
+  font-size: 3.2vh;
+}

@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Criar uma mesa</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()"><ion-icon name="close"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      Detalhes da sua mesa
+    </ion-list-header>
+    <div class="ion-padding" [formGroup]="form">
+      <ion-item>
+        <ion-label position="stacked">Nome da aventura</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Titulo do jogo</ion-label>
+        <ion-input formControlName="title"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Link da imagem</ion-label>
+        <ion-input formControlName="img"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Horário de início</ion-label>
+        <ion-input formControlName="startTime"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Número máximo de jogadores</ion-label>
+        <ion-input formControlName="maxPlayers" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Descrição</ion-label>
+        <ion-textarea formControlName="description"> </ion-textarea>
+      </ion-item>
+    </div>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" color="primary" fill="solid">
+        <ion-icon name="save" slot="start"></ion-icon>
+        Salvar
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -1,4 +1,57 @@
-.welcome-card img {
-  max-height: 35vh;
+ion-menu {
+  --ion-background-color: var(--ion-color-dark-tint);
+  --ion-text-color: var(--ion-color-dark-contrast);
+
+  ion-toolbar {
+    --background: var(--ion-color-dark-tint);
+    --min-height: 100%;
+    min-height: 255px;
+    height: 100%;
+    
+    ion-avatar {
+      width: 44px;
+      height: 44px;
+    }
+
+    ion-title {
+      height: auto;
+    }
+  }
+
+  ion-list {
+    background: transparent;
+
+    & * {
+      color: var(--ion-color-dark-contrast);
+    }
+  }
+}
+
+.split-pane-ios.split-pane-visible > .split-pane-side,
+.split-pane-md.split-pane-visible > .split-pane-side {
+  max-width: 350px;
+  min-width: 350px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: solid 5px var(--ion-color-secondary);
   overflow: hidden;
+  object-fit: cover;
+}
+
+.avatar-container {
+  margin: 32px auto 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.7rem;
+  max-width: 100%;
+  p {
+    text-overflow: ellipsis;
+    max-width: 100%;
+    overflow: hidden;
+  }
 }
