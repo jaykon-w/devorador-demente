@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { from, Observable, of, BehaviorSubject } from 'rxjs';
+import { from, Observable, of, BehaviorSubject, concat } from 'rxjs';
 import {
   bufferCount,
   mergeMap,
@@ -11,6 +11,7 @@ import {
   map,
   withLatestFrom,
   startWith,
+  take,
 } from 'rxjs/operators';
 import { GamePage } from '../../game/game.page';
 import { GameService, IGame } from '../../game/game.service';
@@ -29,6 +30,7 @@ export class EventDetailPage {
   games$: Observable<IGame[]>;
   gamesSub$ = new BehaviorSubject([{} as IGame]);
   event: IEvent;
+  games: IGame[] = [];
   userId: string;
   alreadyParticipateFrom: IGame;
 
@@ -46,33 +48,36 @@ export class EventDetailPage {
       tap(e => (this.event = e)),
     );
 
-    this.games$ = this.event$.pipe(
+    this.event$.pipe(
       pluck('games'),
       mergeMap(games => {
         if (!games.length) {
+          this.games = [];
           return of([]);
         }
-        return from(games).pipe(
-          mergeMap((e: string) => this.gameService.getGame(e)),
-          map(e => ({ ...e, participate: e.players.some(j => j.uid === this.userId) })),
-          withLatestFrom(this.gamesSub$),
-          mergeMap(([e, a]) =>
-            a.map(j => {
-              if (!j.id) {
-                return e;
-              }
-              if (j.id === e.id) {
-                return e;
-              }
-              return j;
+        return concat(
+          from(games).pipe(
+            mergeMap((e: string) => this.gameService.getGame(e)),
+            map(e => ({ ...e, participate: e.players.some(j => j.uid === this.userId) })),
+            bufferCount(games.length),
+            tap(e => (this.alreadyParticipateFrom = e.find((j: any) => j.participate))),
+            tap(e => (this.games = e)),
+            take(1),
+          ),
+          from(games).pipe(
+            mergeMap((e: string) => this.gameService.getGame(e)),
+            tap(e => {
+              this.games = this.games.map(j => {
+                if (j.id === e.id) {
+                  return e;
+                }
+                return j;
+              });
             }),
           ),
-          bufferCount(games.length),
-          tap(e => this.gamesSub$.next(e)),
-          tap(e => (this.alreadyParticipateFrom = e.find((j: any) => j.participate))),
         );
       }),
-    );
+    ).subscribe();
   }
 
   async createGame() {
@@ -111,7 +116,7 @@ export class EventDetailPage {
     if (!confirm(`Deseja realmente apagar a sua mesa de ${game.title} - ${game.name}?`)) {
       return;
     }
-    const games = R.without(this.event.games, [game.id]);
+    const games = R.without([game.id], this.event.games);
     await this.eventService.save({ id: this.event.id, games });
   }
 
@@ -145,7 +150,7 @@ export class EventDetailPage {
     ) {
       return;
     }
-    const players = R.without(game.players, [this.userService.getCleanUser()]);
+    const players = R.without([this.userService.getCleanUser()], game.players);
     await this.gameService.save({ id: game.id, players });
   }
 }

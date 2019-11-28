@@ -38,7 +38,7 @@
       <br />
       <h2>Mesas</h2>
 
-      <ion-card class="games" style="margin: 16px -4px;" *ngFor="let game of (games$ | async)">
+      <ion-card class="games" style="margin: 16px -4px;" *ngFor="let game of games">
         <div style="position: relative;">
           <ion-fab vertical="bottom" horizontal="end" edge *ngIf="userId === game.master.uid">
             <ion-fab-button color="secondary" (click)="editGame(game)">
